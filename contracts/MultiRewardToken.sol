@@ -22,7 +22,7 @@ contract MultiRewardToken is ERC20, Ownable {
 
     address private constant deadWallet = address(0xdead);
 
-    uint256 public swapTokensAtAmount = 2 * 10**6 * 10**18;
+    uint256 public swapTokensAtAmount = 2 * 10**6 * 10**9;
 
     uint8 public rewardsFee = 40;
     uint8 public liquidityFee = 30;
@@ -104,12 +104,16 @@ contract MultiRewardToken is ERC20, Ownable {
             _mint is an internal function in ERC20.sol that is only called here,
             and CANNOT be called ever again
         */
-        _mint(owner(), 1 * 10**9 * 10**18);
+        _mint(owner(), 1 * 10**9 * 10**9);
     }
 
     receive() external payable {
 
   	}
+
+    function decimals() public override pure returns (uint8) {
+        return 9;
+    }
 
     function updateDividendTracker(address newAddress) public onlyOwner {
         require(newAddress != address(dividendTracker), "Multi: The dividend tracker already has that address");
@@ -473,9 +477,9 @@ contract MultiDividendTracker is Ownable, DividendPayingToken {
     event Claim(address indexed account, uint256 amount, bool indexed automatic);
 
     constructor(address router) DividendPayingToken("Multi_Dividen_Tracker", 
-            "Multi_Dividend_Tracker",router, msg.sender) {
+            "Multi_Dividend_Tracker",router) {
     	claimWait = 3600;
-        minimumTokenBalanceForDividends = 20000 * (10**18); //must hold 20000+ tokens
+        minimumTokenBalanceForDividends = 20000 * (10**9); //must hold 20000+ tokens
     }
 
     function _transfer(address, address, uint256) internal pure override {

@@ -44,7 +44,6 @@ contract DividendPayingToken is ERC20, DividendPayingTokenInterface, DividendPay
   mapping(address => uint256) internal withdrawnDividends;
 
   IERC20 private constant BTC = IERC20(address(0xc72B24CD622Ff0C7da0D172ad3463EbBc893704F));
-  IERC20 public token;
 
   uint256 public totalDividendsDistributed;
 
@@ -53,11 +52,10 @@ contract DividendPayingToken is ERC20, DividendPayingTokenInterface, DividendPay
   event SwapBNBForBTC(uint256 amount, address to);
   event SwapBNBForNative(uint256 amount, address to);
 
-  constructor(string memory _name, string memory _symbol, address router, address _token) 
+  constructor(string memory _name, string memory _symbol, address router) 
         ERC20(_name, _symbol) {
 
     uniswapV2Router = IUniswapV2Router02(router);
-    token = IERC20(_token);
 
   }
 
