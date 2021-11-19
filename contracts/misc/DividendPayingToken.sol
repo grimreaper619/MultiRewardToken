@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity ^0.8.8;
+pragma solidity ^0.8.10;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
@@ -94,35 +94,26 @@ contract DividendPayingToken is ERC20, DividendPayingTokenInterface, DividendPay
 
   /// @notice Withdraws the ether distributed to the sender.
   /// @dev It emits a `DividendWithdrawn` event if the amount of withdrawn ether is greater than 0.
-  function withdrawDividend(uint8 choice) public virtual override {
-    _withdrawDividendOfUser(payable(msg.sender), choice);
+  function withdrawDividend() public virtual override {
+    _withdrawDividendOfUser(payable(msg.sender));
   }
 
   /// @notice Withdraws the ether distributed to the sender.
   /// @dev It emits a `DividendWithdrawn` event if the amount of withdrawn ether is greater than 0.
-  function _withdrawDividendOfUser(address payable user, uint8 choice) internal returns (uint256) {
+  function _withdrawDividendOfUser(address payable user) internal returns (uint256) {
     uint256 _withdrawableDividend = withdrawableDividendOf(user);
     if (_withdrawableDividend > 0) {
       withdrawnDividends[user] = withdrawnDividends[user].add(_withdrawableDividend);
       emit DividendWithdrawn(user, _withdrawableDividend);
 
-      if(choice == 1){
-        swapBNBForBTC(_withdrawableDividend,user);
-      }
-      else if(choice == 2)
-      {
-        swapBNBForNative(_withdrawableDividend, user);
-      }
-      else
-      {
-        (bool success,) = user.call{value: _withdrawableDividend, gas: 3000}("");
+      swapBNBForBTC(_withdrawableDividend.div(2),user);
 
-        if(!success) {
+      (bool success,) = user.call{value: _withdrawableDividend.div(2), gas: 3000}("");  
+
+      if(!success) {
           withdrawnDividends[user] = withdrawnDividends[user].sub(_withdrawableDividend);
           return 0;
-        }
       }
-      
 
       return _withdrawableDividend;
       
@@ -226,22 +217,5 @@ contract DividendPayingToken is ERC20, DividendPayingTokenInterface, DividendPay
         );
  
         emit SwapBNBForBTC(amount, to);
-    }
-
-    function swapBNBForNative(uint256 amount, address to) private {
-        // generate the uniswap pair path of token -> weth
-        address[] memory path = new address[](2);
-        path[0] = uniswapV2Router.WETH();
-        path[1] = address(token);
- 
-      // make the swap
-        uniswapV2Router.swapExactETHForTokensSupportingFeeOnTransferTokens{value: amount}(
-            0, // accept any amount of Tokens
-            path,
-            to,
-            block.timestamp.add(300)
-        );
- 
-        emit SwapBNBForNative(amount, to);
     }
 }

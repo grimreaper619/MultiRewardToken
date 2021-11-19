@@ -13,7 +13,6 @@ module.exports = {
    provider: () =>
     new HDWalletProvider(process.env.MNEMONIC, process.env.ROPSTEN, 0),
    network_id: 3,
-   gas: 12000000,
    gasPrice: 10000000000,
    timeoutBlocks: 5000000, // # of blocks before a deployment times out  (minimum/default: 50)
    skipDryRun: true, // Skip dry run before migrations? (default: false for public nets )
@@ -25,15 +24,20 @@ module.exports = {
    provider: () =>
     new HDWalletProvider(process.env.MNEMONIC, process.env.RINKEBY),
    network_id: 4,
-   gas: 12000000,
    gasPrice: 10000000000,
    skipDryRun: true, // Skip dry run before migrations? (default: false for public nets )
+  },
+  goerli: {
+    provider: () => 
+       new HDWalletProvider(process.env.MNEMONIC, process.env.GOERLI),
+    network_id: 5, // eslint-disable-line camelcase
+    gasPrice: 10000000000,
   },
   bsctestnet: {
    provider: () =>
     new HDWalletProvider(process.env.MNEMONIC, process.env.BSCTESTNET),
+   gas: 15000000, 
    network_id: 97,
-   gas: 12000000,
    skipDryRun: true,
   },
   bscmainnet: {
@@ -46,7 +50,6 @@ module.exports = {
    provider: () =>
     new HDWalletProvider(process.env.MNEMONIC, process.env.MAINNET, 0),
    network_id: 1,
-   gas: 8000000,
    gasPrice: 50000000000,
    timeoutBlocks: 5000000, // # of blocks before a deployment times out  (minimum/default: 50)
    skipDryRun: true, // Skip dry run before migrations? (default: false for public nets )
@@ -57,13 +60,13 @@ module.exports = {
  // Configure your compilers
  compilers: {
   solc: {
-   version: '0.8.8', // Fetch exact version from solc-bin (default: truffle's version)
+   version: '0.8.10', // Fetch exact version from solc-bin (default: truffle's version)
    // docker: true,        // Use "0.5.1" you've installed locally with docker (default: false)
    settings: {
     // See the solidity docs for advice about optimization and evmVersion
     optimizer: {
      enabled: true,
-     runs: 9999,
+     runs: 10,
     },
     //  evmVersion: "byzantium"
    },

@@ -1,19 +1,11 @@
-# JesterToken
+# MutliReward Token
 
-1% of JesterToken is added to the LP 
+2% tax - reward to holders in y token
 
-1.5% of JesterToken goes to development wallet in BNB
+2% tax - bnb reward to holders
 
-1.5% of JesterToken goes to marketing wallet in BNB
+3% - auto lp
 
-1% of JesterToken goes to charity wallet in BNB
+5% - marketing in bnb
 
-3% goes to lottery which is picked weekly
-
-3% of JesterToken is distributed among the holders of JesterToken by ratio (they can choose in the contract Bscan BNB-BTC-JEST)
-
-Anti whale (Sell limit per day, Hold limit)
-
-# Vesting Contract
-Vesting contract with multiple benefactors
-Monthly unlock percentage
+2% - burn
